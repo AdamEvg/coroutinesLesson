@@ -1,16 +1,18 @@
 package ru.mts.data.news.remote
 
-import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Headers
-import retrofit2.http.POST
 
 interface NewsApiService {
 
-    @POST("api/v1/sample")
+    @GET(GET_NEWS_METHOD)
     @Headers("Content-Type:application/json; charset=utf-8;")
-    suspend fun getSampleData(@Body request: NewsDto.Request): NewsDto.Response
+    suspend fun getNews(): List<NewsResponse>
 
-    @POST("login")
-    @Headers("Content-Type:application/json; charset=utf-8;")
-    suspend fun login(): Boolean
+    companion object {
+        private const val SERVICE_NAME = "my-service-news"
+        private const val API_VERSION = "v1"
+        private const val METHOD_NAME = "news"
+        const val GET_NEWS_METHOD = "$SERVICE_NAME/$API_VERSION/$METHOD_NAME"
+    }
 }

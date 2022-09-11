@@ -16,13 +16,13 @@ import ru.mts.coroutines.ui.theme.CoroutinesTheme
 import ru.mts.data.news.db.NewsLocalDataSource
 import ru.mts.data.news.remote.NewsRemoteDataSource
 import ru.mts.data.news.repository.NewsRepository
+import ru.mts.data.news.repository.model.NewsMapper
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             CoroutinesTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -32,24 +32,12 @@ class MainActivity : ComponentActivity() {
                             NewsRepository(
                                 NewsLocalDataSource(applicationContext),
                                 NewsRemoteDataSource(),
+                                NewsMapper()
                             )
                         )
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    CoroutinesTheme {
-        Greeting("Android")
     }
 }
