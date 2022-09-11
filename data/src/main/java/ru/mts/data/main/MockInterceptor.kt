@@ -5,12 +5,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.asResponseBody
-import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.mockwebserver.MockResponse
+import ru.mts.data.news.remote.NewsApiService
 import ru.mts.data.utils.ResourcesReader
-import java.io.File
-import java.io.FileNotFoundException
-import java.net.URL
 
 class MockInterceptor : Interceptor {
 
@@ -19,12 +16,12 @@ class MockInterceptor : Interceptor {
         val body =
             MockResponse().setBodyFromFile(
                 when {
-                    uri.endsWith("api/v1/sample") -> "assets/news.json"
+                    uri.endsWith(NewsApiService.GET_NEWS_METHOD) -> "assets/news.json"
                     else -> ""
                 }
 
             ).getBody()
-            ?.asResponseBody("application/json".toMediaTypeOrNull())
+                ?.asResponseBody("application/json".toMediaTypeOrNull())
 
         return chain.proceed(chain.request())
             .newBuilder()
@@ -36,11 +33,11 @@ class MockInterceptor : Interceptor {
             .addHeader("content-type", "application/json")
             .build()
     }
-}
 
-fun MockResponse.setBodyFromFile(filName: String): MockResponse {
-    val text = ResourcesReader.readText(filName)
-    setBody(text)
-    return this
+    private fun MockResponse.setBodyFromFile(filName: String): MockResponse {
+        val text = ResourcesReader.readText(filName)
+        setBody(text)
+        return this
+    }
 }
 
